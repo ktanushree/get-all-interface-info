@@ -16,12 +16,12 @@ MIT
 #### Usage Example:
 ```bash
 mb-pro:get-all-interface-info aaron$ ./get-all-interface-info.py 
-CloudGenix Site Interface info -> CSV Generator v4.5.5b2 (https://api.elcapitan.cloudgenix.com)
+CloudGenix Site Interface info -> CSV Generator v5.6.1b1 (https://api.elcapitan.cloudgenix.com)
 
 login: aaron@democompany.com
 Password: 
 
-Creating ./democompanyinc_interfaces_2017-12-20-21-28-58.csv for data output...
+Creating ./democompanyinc_interfaces_2021-09-27-21-28-58.csv for data output...
 Caching Sites..
 Caching Elements..
 Caching WAN Networks..
@@ -40,6 +40,7 @@ mb-pro:get-all-interface-info aaron$
 #### Version
 Version | Changes
 ------- | --------
+**1.1.2**| CSV now includes interface description.
 **1.1.1**| Minor edits to support commas in Site & Element names. Added AUTH TOKEN support.
 **1.1.0**| `pip install cloudgenix_get_all_interface_info` support, python3 support
 **1.0.0**| Initial Release.

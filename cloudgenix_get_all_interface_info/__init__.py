@@ -4,6 +4,7 @@ CGNX Get all interface info for all sites.
 Python v2.7+.x only, not python3 compatible yet.
 
 cloudgenix@ebob9.com
+tkamath@paloaltonetworks.com
 
 """
 # standard modules
@@ -387,17 +388,17 @@ def securitypolicyset_to_name_dict(session):
 
 
 def write_to_csv(csv_file_name, site_name="", site_type="", site_admin_state="", element_name="", interface_name="",
-                 intf_used_for="", site_policyset_name="", site_security_policyset_name="", interface_admin_state="",
-                 mac_address="", vlan="", interface_str="", if_config_type="", interface_mtu="",
+                 interface_description="", intf_used_for="", site_policyset_name="", site_security_policyset_name="",
+                 interface_admin_state="", mac_address="", vlan="", interface_str="", if_config_type="", interface_mtu="",
                  network_context="", local_global="", security_zone="", swi_name="", conf_bw_up="", conf_bw_down="",
                  pcm_enabled="", lqm_enabled="", qos_enabled="", circuit_category="", wan_network_name="", nat_addr="",
                  nat_port=0, operational_state="", operational_speed="", operational_duplex="", operational_link="",
                  operational_device=""):
     # global variable write.
-    write_str = '"{0}",{1},{2},"{3}",="{4}",{5},{6},{7},{8},{9},' \
-                '{10},{11},{12},="{13}",{14},{15},{16},{17},' \
+    write_str = '"{0}",{1},{2},"{3}","{4}","{5}",{6},{7},{8},{9},' \
+                '{10},{11},{12},{13},"{14}",{15},{16},{17},' \
                 '{18},{19},{20},{21},{22},{23},{24},{25},' \
-                '{26},{27},{28},{29},{30},{31}\n' \
+                '{26},{27},{28},{29},{30},{31},{32}\n' \
         .format(
         # Site Name
         site_name,
@@ -409,6 +410,8 @@ def write_to_csv(csv_file_name, site_name="", site_type="", site_admin_state="",
         element_name,
         # Interface name
         interface_name,
+        # Interface description
+        interface_description,
         # Interface used for
         intf_used_for,
         # Network Policy
@@ -594,7 +597,7 @@ def go():
 
     print("Creating %s for data output..." % (str(interfaces_csv)))
     with open(interfaces_csv, 'w') as csv_file:
-        csv_file.write('Site,Site Type,Site Mode,ION,Interface,Used For,Network Policy,Admin State,'
+        csv_file.write('Site,Site Type,Site Mode,ION,Interface,Interface Description,Used For,Network Policy,Admin State,'
                        'Operational State,Speed,Duplex,Link State,'
                        'MAC Address,VLAN Tag,Address/Mask List,Configured By,'
                        'Configured MTU,Network Context,Local or Global,Circuit Name,Configured BW Up,'
@@ -635,7 +638,9 @@ def go():
     print("Filling Network Site->Element->Interface table..")
 
     # could be a long query - start a progress bar.
-    pbar = ProgressBar(widgets=[Percentage(), Bar(), ETA()], max_value=firstbar).start()
+    #pbar = ProgressBar(widgets=[Percentage(), Bar(), ETA()], max_value=firstbar).start()
+    pbar = ProgressBar(widgets=[Percentage(), Bar(), ETA()],maxval=firstbar).start()
+
 
     for site in site_id_list:
         elements = []
@@ -679,7 +684,8 @@ def go():
     print("Querying all interfaces for current status..")
 
     # could be a long query - start a progress bar.
-    pbar = ProgressBar(widgets=[Percentage(), Bar(), ETA()], max_value=secondbar).start()
+    #pbar = ProgressBar(widgets=[Percentage(), Bar(), ETA()], max_value=secondbar).start()
+    pbar = ProgressBar(widgets=[Percentage(), Bar(), ETA()], maxval=secondbar).start()
 
     for site_dict in system_list:
         site_name = site_dict.get('name', "")
@@ -782,6 +788,7 @@ def go():
                         vlan_id = "NATIVE"
                         interface_name = interface_dict.get('name', "")
                         interface_id = interface_dict.get('id', None)
+                        interface_description = interface_dict.get('description', None)
 
                         # interface_dict just stores name/id - pull rest out of intf lookup dict.
                         interface_data = id_interface_dict.get(interface_id, {})
@@ -987,6 +994,8 @@ def go():
                                              element_name,
                                              # Interface name
                                              interface_name,
+                                             # Interface description
+                                             interface_description,
                                              # Interface used for
                                              used_for,
                                              # Network Policy
@@ -1107,6 +1116,8 @@ def go():
                                              element_name,
                                              # Interface name
                                              interface_name,
+                                             # Interface description
+                                             interface_description,
                                              # Interface used for
                                              used_for,
                                              # Network Policy
@@ -1187,6 +1198,8 @@ def go():
                                          element_name,
                                          # Interface name
                                          interface_name,
+                                         # Interface description
+                                         interface_description,
                                          # Interface used for
                                          used_for,
                                          # Network Policy
@@ -1265,6 +1278,8 @@ def go():
                              # ION name
                              "",
                              # Interface name
+                             "",
+                             # Interface description
                              "",
                              # Interface used for
                              "Site IP Prefixes",
