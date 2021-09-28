@@ -788,7 +788,9 @@ def go():
                         vlan_id = "NATIVE"
                         interface_name = interface_dict.get('name', "")
                         interface_id = interface_dict.get('id', None)
-                        interface_description = interface_dict.get('description', None)
+                        interface_description = interface_dict.get('description', "")
+                        if interface_description is None:
+                            interface_description = ""
 
                         # interface_dict just stores name/id - pull rest out of intf lookup dict.
                         interface_data = id_interface_dict.get(interface_id, {})
